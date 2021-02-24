@@ -19,15 +19,14 @@ import java.util.Date;
 @TableName("method_lock")
 public class MethodLock {
     private static final long serialVersionUID = 1L;
-    @TableField(value = "id")
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     @TableField(value = "method_name")
     private String methodName;
     @TableField(value = "state")
     private Boolean state;
     @TableField(value = "update_time")
-    private Date update_time;
+    private Date updateTime;
     @TableField(value = "version")
     private Integer version;
     @TableField(value = "ip")
