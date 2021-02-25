@@ -24,7 +24,7 @@ spring:
         wall:
           enabled: true
       initial-size: 3
-      max-active: 30
+      max-active: 1000
       max-open-prepared-statements: 30
       max-wait: 12000
       min-evictable-idle-time-millis: 30000
@@ -41,12 +41,13 @@ spring:
         profile-enable: true
         session-stat-enable: true
         url-pattern: /*
+      remove-abandoned: true
     username: root
     password: Meeting#12345
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
 
 
