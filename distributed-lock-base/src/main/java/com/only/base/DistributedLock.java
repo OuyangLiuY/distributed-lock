@@ -10,7 +10,7 @@ public interface DistributedLock {
      * @param unit
      * @return
      */
-    boolean tryLock(String key, long timeout , TimeUnit unit);
+    Boolean tryLock(String key, long timeout , TimeUnit unit);
 
     /**
      * 解锁

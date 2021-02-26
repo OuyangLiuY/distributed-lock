@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = com.only.test.MySqlLockApplication.class)
+@SpringBootTest(classes = com.only.MySqlLockApplication.class)
 public class MySqlDistributedLockTest {
     @Autowired
     MySqlDistributedLock mySqlDistributedLock;
