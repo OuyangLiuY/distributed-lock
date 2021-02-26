@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
-public class RedisDistributedLockImpl implements DistributedLock {
+public class RedisDistributedLockImpl implements RedisDistributeLock {
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
@@ -61,6 +61,41 @@ public class RedisDistributedLockImpl implements DistributedLock {
         log.info("释放当前锁 = " + threadLocal.get());
         if (threadLocal.get().equals(stringRedisTemplate.opsForValue().get(key))) {
             stringRedisTemplate.delete(key);
+        }
+    }
+
+    @Override
+    public boolean tryReLock(String key, long timeout, TimeUnit unit) {
+        long futureTime = timeout + System.currentTimeMillis();
+        String uuid = threadLocal.get();
+        if (uuid == null) {
+            uuid = UUID.randomUUID().toString();
+            threadLocal.set(uuid);
+        }
+        for (; ; ) {
+            log.info("uuid = " + uuid);
+            Long res = stringRedisTemplate.opsForHash().increment(key, uuid, 1L);
+            if (res > 0) {
+                log.info("获取锁成功 = " + uuid);
+                return true;
+            }
+            long now = System.currentTimeMillis();
+            /*if(futureTime - now < 0){
+                break;
+            }*/
+        }
+    }
+
+    @Override
+    public void releaseReLock(String key) {
+        String uuid = threadLocal.get();
+        log.info("释放当前锁 = " + uuid);
+        long res  = Long.parseLong(String.valueOf(stringRedisTemplate.opsForHash().get(key,uuid )));
+        System.out.println("res = " + res);
+        if(res > 1){
+            stringRedisTemplate.opsForHash().increment(key, threadLocal.get(),-1L);
+        }else {
+            stringRedisTemplate.opsForHash().delete(key,uuid);
         }
     }
 }
