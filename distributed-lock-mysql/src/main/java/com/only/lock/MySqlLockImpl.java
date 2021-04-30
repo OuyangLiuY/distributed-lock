@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +32,7 @@ public class MySqlLockImpl implements MySqlDistributedLock {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean tryLock(String key, long timeout, TimeUnit unit) {
+    public Boolean tryLock(String key, long timeout, TimeUnit unit) {
         //尝试获取锁
         int res;
         long begin = System.currentTimeMillis();
