@@ -18,14 +18,14 @@ public class RedLockTest {
 
     public static RLock create (String url, String key){
         Config config = new Config();
-        config.useSingleServer().setAddress(url).setPassword("Survey@2019");
+        config.useSingleServer().setAddress(url).setPassword("******");
         RedissonClient redissonClient = Redisson.create(config);
         return redissonClient.getLock(key);
     }
     RedissonRedLock redissonRedLock = new RedissonRedLock(
-            create("redis://118.89.165.94:16379","lock_key1"),
-            create("redis://118.89.165.94:16379","lock_key2"),
-            create("redis://118.89.165.94:16379","lock_key3"));
+            create("redis://127.0.0.1:16379","lock_key1"),
+            create("redis://127.0.0.1:16380","lock_key2"),
+            create("redis://127.0.0.1:16381","lock_key3"));
     RedisRedLock redLock = new RedisRedLock(redissonRedLock);
     ExecutorService executorService = Executors.newCachedThreadPool();
     @SneakyThrows

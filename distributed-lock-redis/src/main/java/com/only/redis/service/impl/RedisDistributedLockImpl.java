@@ -1,11 +1,9 @@
-package com.only.redis.service;
+package com.only.redis.service.impl;
 
 
-import com.only.base.DistributedLock;
-import com.only.redis.util.RedisClient;
+import com.only.redis.service.RedisDistributeLock;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +22,9 @@ public class RedisDistributedLockImpl implements RedisDistributeLock {
     private final ThreadLocal<Integer> threadLocalInteger = new ThreadLocal<>();
 
     /**
-     * redis实现锁的简单方式，思想：setValue成功获取锁，（否则循环等待尝试set），释放锁，直接删除当前key，--非重入方式
+     * redis实现锁的简单方式，
+     * 思想：setValue成功获取锁，（否则循环等待尝试set），释放锁，直接删除当前key，
+     * 非重入方式
      * @param key
      * @param timeout
      * @param unit
@@ -33,7 +33,7 @@ public class RedisDistributedLockImpl implements RedisDistributeLock {
     @Override
     public Boolean tryLock(String key, long timeout, TimeUnit unit) {
         Boolean isLocked;
-        //log.info("尝试获取 redis lock 锁");
+        log.info("尝试获取 redis lock 锁");
         long futureTime = timeout + System.currentTimeMillis();
         String uuid = null;
         for (; ; ) {
@@ -48,11 +48,11 @@ public class RedisDistributedLockImpl implements RedisDistributeLock {
                 return true;
             }
             long now = System.currentTimeMillis();
-            /*if(futureTime - now < 0){
+            if(futureTime - now < 0){
                 break;
-            }*/
+            }
         }
-        //throw  new RuntimeException("获取锁超时...");
+        throw  new RuntimeException("获取锁超时...");
     }
 
     @Override
@@ -80,10 +80,11 @@ public class RedisDistributedLockImpl implements RedisDistributeLock {
                 return true;
             }
             long now = System.currentTimeMillis();
-            /*if(futureTime - now < 0){
+            if(futureTime - now < 0){
                 break;
-            }*/
+            }
         }
+        throw  new RuntimeException("获取锁失败，超时...");
     }
 
     @Override

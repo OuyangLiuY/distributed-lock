@@ -130,6 +130,7 @@ public class MySqlLockImpl implements MySqlDistributedLock {
     public boolean pessimisticLock(String methodName, long timeout, TimeUnit unit) {
         String sql = "SELECT id from method_lock where method_name = ? for UPDATE";
         //isContains(methodName);
+        // 1.获取锁，不释放事务
         transaction.set(dataSourceTransactionManager.getTransaction(transactionDefinition));
         long waitTime = 500;
         long futureTime = System.currentTimeMillis() + timeout;
@@ -166,6 +167,7 @@ public class MySqlLockImpl implements MySqlDistributedLock {
 
     @Override
     public void releasePessimisticLock(String methodName) {
+        // 2.释放锁，释放事务
         dataSourceTransactionManager.commit(transaction.get());
     }
 

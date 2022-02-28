@@ -5,6 +5,9 @@ import lombok.Data;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * etcd节点锁数据
+ */
 @Data
 public class LockData {
     private String lockKey;
